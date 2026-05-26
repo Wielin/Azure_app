@@ -4,10 +4,6 @@ on:
   push:
     branches: [main]
 
-env:
-  IMAGE_APP: ghcr.io/${{ github.repository }}/app
-  IMAGE_NGINX: ghcr.io/${{ github.repository }}/nginx
-
 jobs:
   build:
     name: Build & Push images
@@ -17,6 +13,11 @@ jobs:
       packages: write
 
     steps:
+      - name: Set lowercase image names
+        run: |
+          echo "IMAGE_APP=ghcr.io/$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')/app" >> $GITHUB_ENV
+          echo "IMAGE_NGINX=ghcr.io/$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')/nginx" >> $GITHUB_ENV
+
       - name: Checkout
         uses: actions/checkout@v4
 
